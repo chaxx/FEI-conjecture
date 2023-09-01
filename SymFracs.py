@@ -62,12 +62,16 @@ class Symnomial:
 
 def kravchuk(m, x, n):
     """
-    return evaluation of Kravchuk polynomial $K_m(x; n)$ for integer x.
+    Evaluate Kravchuk polynomial $K_m(x; n)$ for integer x.
     """
     return sum([(-1)**j * math.comb(x, j) * math.comb(n-x, m-j) for j in range(m+1)])
 
 
 def symmetric(bitmap, n):  # len must be n + 1
+    """
+    Set up symmetric Boolean function given by one-parameter "bitmap"
+    that specifies a Boolean output for each possibly Hamming weight.
+    """
     coef_arr = []
     for s in range(0, n + 1):  # compute Fourier coeff at subsets S of size s
         numerator = sum([kravchuk(m, s, n) * bitmap[m] for m in range(n+1)])
@@ -76,6 +80,11 @@ def symmetric(bitmap, n):  # len must be n + 1
 
 
 def monotone_symmetric(thresh, n):
+    """
+    Like `symmetric' above, but specialized to monotone (downwards) functions;
+    each such function is given by a single threshold parameter `thresh'; the
+    implied bitmap is [1] * thresh + [-1] * (n + 1 - thresh).
+    """
     coef_arr = []
     # compute the level-0 Fourier coeff
     numerator = sum([math.comb(n, m) for m in range(thresh)])
